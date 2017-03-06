@@ -7,6 +7,8 @@ import {fullBlack, darkBlack} from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import AppBar from 'material-ui/AppBar'
 
+import 'fixed-data-table/dist/fixed-data-table.min.css'
+
 import { App } from './components/App'
 import './styles'
 
