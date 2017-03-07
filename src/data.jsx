@@ -56,7 +56,7 @@ const search = (query, idols) => {
   })
 }
 
-export default (q_caller, q_callee) => {
+export const filter = (q_caller, q_callee) => {
   const caller_hits = search(q_caller, list)
   const callee_hits = search(q_callee, list)
   const callee_names = callee_hits.map(({name}) => name.replace(' ', ''))
@@ -77,19 +77,23 @@ export default (q_caller, q_callee) => {
         called,
       }
     })
-  }).filter(array => array.length > 0).reduce((prev, curr) => [...prev, ...curr])
-
-  return [tmp.map(({caller, callee, called}) => {
-    return {
-      caller: caller.name,
-      callee: callee.name,
-      called: called,
-    }
-  }), tmp.map(({caller, callee}, i) => {
-    return {
-      caller: palette[caller.type][i % 2],
-      callee: palette[callee.type][i % 2],
-      called: palette[callee.type][i % 2],
-    }
-  })]
+  }).filter(array => array.length > 0).map((set, i) => {
+    return set.map(({caller, callee, called}, j) => {
+      return {
+        data: {
+          caller: j == 0 ? caller.name : '',
+          callee: callee.name,
+          called: called,
+        },
+        colors: {
+          caller: palette[caller.type][i % 2],
+          callee: palette[callee.type][(i + j) % 2],
+          called: palette[callee.type][(i + j) % 2],
+        }
+      }
+    })
+  }).reduce((prev, curr) => [...prev, ...curr])
+  return [tmp.map(e => e.data), tmp.map(e => e.colors)]
 }
+
+export default filter
